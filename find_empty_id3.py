@@ -1,3 +1,4 @@
+import argparse
 import os
 
 from mutagen.easyid3 import EasyID3
@@ -102,9 +103,9 @@ def update_flac_id3(flac_path):
         flac.save()
 
 
-def main():
-    mp3s = get_files_of_type('mp3')
-    flacs = get_files_of_type('flac')
+def main(path):
+    mp3s = get_files_of_type('mp3', path)
+    flacs = get_files_of_type('flac', path)
 
     missing_mp3s = [mp3 for mp3 in mp3s if mp3_has_missing_info(load_mp3(mp3))]
     missing_flacs = [
@@ -124,4 +125,8 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-p', help='Path to glob for .mp3 and .flac files', dest='path')
+    args = parser.parse_args()
+
+    main(args.path)
